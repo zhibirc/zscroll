@@ -48,20 +48,25 @@ define(['jquery'], function ($) {
                 bullets = doc.querySelectorAll('#paginator b');
                 bullets[0].classList.add('active-screen');
 
-                [].forEach.call(bullets, function (elem, idx) {
-                    elem.addEventListener('click', function () {
-                        if (this.classList.contains('active-screen')) {
-                            return false;
-                        }
-                        if ($) {
-                            $('html, body').animate({ scrollTop: idx === 0 ? 0 : $('.z-scroll').eq(idx).offset().top * 0.95 }, 1000);
-                        } else {
-                            doc.querySelectorAll('.z-scroll')[idx].scrollIntoView();
-                        }
-                    }, false);
-                });
+				doc.getElementById('paginator').addEventListener('click', function (e) {
+					var targetBullet = e.target,
+						bulletIdx = Array.prototype.indexOf.call(e.currentTarget.children, targetBullet);
+					
+					e.stopPropagation();
+					
+					if (targetBullet.classList.contains('active-screen')) {
+						return false;
+                    }
+					
+					if ($) {
+						$('html, body').animate({ scrollTop: bulletIdx === 0 ? 0 : $('.z-scroll').eq(bulletIdx).offset().top * 0.95 }, 1000);
+					} else {
+						doc.querySelectorAll('.z-scroll')[bulletIdx].scrollIntoView();
+					}
+				}, false);
 
                 window.addEventListener('scroll', function () {
+					// TODO: implement event delegation.
                     [].forEach.call(bullets, function (elem, idx) {
                         var currentSectionOffset = __accessories.getOffsetTop(doc.querySelectorAll('.z-scroll')[idx]);
 						
