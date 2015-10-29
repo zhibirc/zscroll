@@ -1,0 +1,25 @@
+#paginator {
+    border: 1px solid #b1c9bc;
+    box-sizing: border-box;
+    height: 160px;
+    margin-top: -80px;
+    position: fixed;
+    right: 18px;
+    top: 50%;
+    width: 0;
+}
+
+#paginator b {
+    background: #b1c9bc;
+    border-radius: 50%;
+    cursor: pointer;
+    display: inline-block;
+    height: 10px;
+    margin: -1px 0 15px -5px;
+    width: 10px;
+}
+
+#paginator b.active-screen {
+    background: #3c9;
+    cursor: default;
+}
