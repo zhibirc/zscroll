@@ -9,5 +9,5 @@ requirejs.config({
 
 /** INITIAL */
 require(['jquery', 'zscroll'], function ($, zScroll) {
-	zScroll().init(1.7);
+	zScroll.init({});
 });

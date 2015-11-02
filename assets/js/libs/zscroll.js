@@ -1,5 +1,5 @@
 define(['jquery'], function ($) { 'use strict';
-	var zScroll = function () {
+	var zScroll = (function () {
         var doc = document,
 			body = doc.body,
             docRoot = document.documentElement,
@@ -30,17 +30,32 @@ define(['jquery'], function ($) { 'use strict';
                 return Math.round(top);
             }
         };
+		
+		function validateOpts(opts, amount) {
+			if (amount > 1 || (amount && Object.prototype.toString.call(opts).slice(8, -1) !== 'Object')) {
+				throw new Error('zScroll initialization: incorrect syntax, see documentation for details.');
+			}
+			
+			return {
+				fill: opts.fill || '#000',
+				shape: opts.shape || 'circle',
+				size: opts.size || 'small',
+				threshold: opts.threshold || 2
+			};
+		}
 
         /** Public API. */
         return {
             /**
              * Scroller initialization.
-             * @param {Number} threshold
+             * @param {Object} options
              */
-            init: function (threshold) {
-				var bullets = Array(scrollAreas.length + 1).join('<b></b>');
+            init: function (opts) {
+				var bullets;
 				
-                threshold = threshold || 1;
+				opts = validateOpts(opts, arguments.length);
+				
+                bullets = Array(scrollAreas.length + 1).join('<b></b>');
                 
                 body.insertAdjacentHTML('beforeEnd', '<div id="paginator">' + bullets + '</div>');
                 bullets = doc.querySelectorAll('#paginator b');
@@ -67,7 +82,7 @@ define(['jquery'], function ($) { 'use strict';
                     [].forEach.call(bullets, function (elem, idx) {
                         var currentSectionOffset = __accessories.getOffsetTop(doc.querySelectorAll('.z-scroll')[idx]);
 						
-                        if (currentSectionOffset > (scrollTop * threshold) && currentSectionOffset < (scrollTop + userViewportH) / threshold) {
+                        if (currentSectionOffset > (scrollTop * opts.threshold) && currentSectionOffset < (scrollTop + userViewportH) / opts.threshold) {
                             [].forEach.call(bullets, function (elem) {
                                 elem.classList.remove('active-screen');
                             });
@@ -78,7 +93,7 @@ define(['jquery'], function ($) { 'use strict';
                 }, false);
             }
         };
-    };
+    }());
 
     return zScroll;
 });
