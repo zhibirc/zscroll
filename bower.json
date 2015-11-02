@@ -1,0 +1,22 @@
+{
+  "name": "zscroll",
+  "homepage": "https://github.com/zhibirc/zscroll",
+  "authors": [
+    "zhibirc"
+  ],
+  "description": "Full Screen Vertical Scroller",
+  "main": "",
+  "moduleType": [],
+  "license": "GPLv3",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.4",
+    "requirejs": "~2.1.20"
+  }
+}
