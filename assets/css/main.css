@@ -1,3 +1,9 @@
+html, body, section, div, b {
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
 #paginator {
     border: 1px solid #b1c9bc;
     box-sizing: border-box;
@@ -22,4 +28,29 @@
 #paginator b.active-screen {
     background: #3c9;
     cursor: default;
+}
+
+.z-scroll {
+	height: 500px;
+	width: 100%;
+}
+
+.z-scroll:nth-child(1) {
+	background: #72B5AC;
+}
+
+.z-scroll:nth-child(2) {
+	background: #F7FBAF;
+}
+
+.z-scroll:nth-child(3) {
+	background: #8F9281;
+}
+
+.z-scroll:nth-child(4) {
+	background: #6F7664;
+}
+
+.z-scroll:nth-child(5) {
+	background: #614A38;
 }

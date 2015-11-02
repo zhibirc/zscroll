@@ -1,7 +1,5 @@
-define(['jquery'], function ($) {
-    'use strict';
-
-    var zScroll = function () {
+define(['jquery'], function ($) { 'use strict';
+	var zScroll = function () {
         var doc = document,
 			body = doc.body,
             docRoot = document.documentElement,
@@ -66,7 +64,6 @@ define(['jquery'], function ($) {
 				}, false);
 
                 window.addEventListener('scroll', function () {
-					// TODO: implement event delegation.
                     [].forEach.call(bullets, function (elem, idx) {
                         var currentSectionOffset = __accessories.getOffsetTop(doc.querySelectorAll('.z-scroll')[idx]);
 						
