@@ -5,7 +5,7 @@ html, body, section, div, b {
 }
 
 #paginator {
-    border: 1px solid #b1c9bc;
+    border-left: 1px solid #000;
     box-sizing: border-box;
     height: 160px;
     margin-top: -80px;
@@ -16,19 +16,19 @@ html, body, section, div, b {
 }
 
 #paginator b {
-    background: #b1c9bc;
-    border-radius: 50%;
     cursor: pointer;
     display: inline-block;
-    height: 10px;
-    margin: -1px 0 15px -5px;
-    width: 10px;
+    height: 11px;
+    margin: -1px 0 15px -6px;
+    width: 11px;
 }
 
 #paginator b.active-screen {
-    background: #3c9;
+    opacity: .5;
     cursor: default;
 }
+
+/* SECTIONS */
 
 .z-scroll {
 	height: 500px;

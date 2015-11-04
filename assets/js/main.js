@@ -9,5 +9,11 @@ requirejs.config({
 
 /** INITIAL */
 require(['jquery', 'zscroll'], function ($, zScroll) {
-	zScroll.init({});
+	zScroll.init({
+		connector: false,
+		fill: '#000',
+		shape: 'circle',
+		size: 'small',
+		threshold: 2
+	});
 });

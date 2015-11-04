@@ -51,13 +51,15 @@ define(['jquery'], function ($) { 'use strict';
              * @param {Object} options
              */
             init: function (opts) {
-				var bullets;
+				var bullets, styles;
 				
 				opts = validateOpts(opts, arguments.length);
 				
                 bullets = Array(scrollAreas.length + 1).join('<b></b>');
+				styles = [opts.shape, opts.size].join(' ');
+				doc.getElementsByTagName('head')[0].insertAdjacentHTML('beforeEnd', '<style>#paginator b { background:' + opts.fill + '; }</style');
                 
-                body.insertAdjacentHTML('beforeEnd', '<div id="paginator">' + bullets + '</div>');
+                body.insertAdjacentHTML('beforeEnd', '<div id="paginator" class="' + styles + '">' + bullets + '</div>');
                 bullets = doc.querySelectorAll('#paginator b');
                 bullets[0].classList.add('active-screen');
 
