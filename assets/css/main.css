@@ -7,8 +7,6 @@ html, body, section, div, b {
 #paginator {
     border-left: 1px solid #000;
     box-sizing: border-box;
-    height: 160px;
-    margin-top: -80px;
     position: fixed;
     right: 18px;
     top: 50%;

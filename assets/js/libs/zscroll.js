@@ -8,9 +8,9 @@ define(['jquery'], function ($) { 'use strict';
             scrollTop = window.pageYOffset || docRoot.scrollTop || body.scrollTop,
             clientTop = docRoot.clientTop || body.clientTop || 0,
             scrollAreas = doc.querySelectorAll('.z-scroll'),
-            __accessories;
+            _accessories;
 
-        __accessories = {
+        _accessories = {
             iterateAreas: function (fn) {
                 for (var i = 0, l = scrollAreas.length; i < l; i += 1) {
                     (function (idx) { fn.call(null, idx) && (i = Infinity); }(i));
@@ -28,21 +28,40 @@ define(['jquery'], function ($) { 'use strict';
                     }
                 }
                 return Math.round(top);
-            }
-        };
-		
-		function validateOpts(opts, amount) {
-			if (amount > 1 || (amount && Object.prototype.toString.call(opts).slice(8, -1) !== 'Object')) {
-				throw new Error('zScroll initialization: incorrect syntax, see documentation for details.');
+            },
+			validateOpts: function (opts, amount) {
+				if (amount > 1 || (amount && Object.prototype.toString.call(opts).slice(8, -1) !== 'Object')) {
+					throw new Error('zScroll initialization: incorrect syntax, see documentation for details.');
+				}
+				
+				return {
+					fill: opts.fill || '#000',
+					shape: opts.shape || 'circle',
+					size: opts.size || 'small',
+					threshold: opts.threshold || 2
+				};
+			},
+			render: function (opts) {
+				var bullets, paginator, styleClasses;
+				
+				bullets = Array(scrollAreas.length + 1).join('<b></b>');
+				
+				styleClasses = [opts.shape, opts.size].join(' ');
+				doc.getElementsByTagName('head')[0].insertAdjacentHTML('beforeEnd', '<style>#paginator b { background: ' + opts.fill + '; }</style');
+                body.insertAdjacentHTML('beforeEnd', '<div id="paginator" class="' + styleClasses + '">' + bullets + '</div>');
+				
+				paginator = doc.getElementById('paginator');
+				
+				paginator.style.marginTop = -parseFloat(getComputedStyle(paginator).height) / 2;
+                bullets = doc.querySelectorAll('#paginator b');
+                bullets[0].classList.add('active-screen');
+				
+				return {
+					bullets: bullets,
+					paginator: paginator
+				};
 			}
-			
-			return {
-				fill: opts.fill || '#000',
-				shape: opts.shape || 'circle',
-				size: opts.size || 'small',
-				threshold: opts.threshold || 2
-			};
-		}
+        };
 
         /** Public API. */
         return {
@@ -51,19 +70,12 @@ define(['jquery'], function ($) { 'use strict';
              * @param {Object} options
              */
             init: function (opts) {
-				var bullets, styles;
+				var bullets, renderInfo;
 				
-				opts = validateOpts(opts, arguments.length);
-				
-                bullets = Array(scrollAreas.length + 1).join('<b></b>');
-				styles = [opts.shape, opts.size].join(' ');
-				doc.getElementsByTagName('head')[0].insertAdjacentHTML('beforeEnd', '<style>#paginator b { background:' + opts.fill + '; }</style');
-                
-                body.insertAdjacentHTML('beforeEnd', '<div id="paginator" class="' + styles + '">' + bullets + '</div>');
-                bullets = doc.querySelectorAll('#paginator b');
-                bullets[0].classList.add('active-screen');
+				opts = _accessories.validateOpts(opts, arguments.length);
+				renderInfo = _accessories.render(opts);
 
-				doc.getElementById('paginator').addEventListener('click', function (e) {
+				renderInfo.paginator.addEventListener('click', function (e) {
 					var targetBullet = e.target,
 						bulletIdx = Array.prototype.indexOf.call(e.currentTarget.children, targetBullet);
 					
@@ -74,22 +86,22 @@ define(['jquery'], function ($) { 'use strict';
                     }
 					
 					if ($) {
-						$('html, body').animate({ scrollTop: bulletIdx === 0 ? 0 : $('.z-scroll').eq(bulletIdx).offset().top * 0.95 }, 1000);
+						$('html, body').animate({ scrollTop: bulletIdx === 0 ? 0 : $('.z-scroll').eq(bulletIdx).offset().top * .95 }, 1e3);
 					} else {
 						doc.querySelectorAll('.z-scroll')[bulletIdx].scrollIntoView();
 					}
 				}, false);
 
                 window.addEventListener('scroll', function () {
-                    [].forEach.call(bullets, function (elem, idx) {
-                        var currentSectionOffset = __accessories.getOffsetTop(doc.querySelectorAll('.z-scroll')[idx]);
+                    [].forEach.call(renderInfo.bullets, function (elem, idx, arr) {
+                        var currentSectionOffset = _accessories.getOffsetTop(doc.querySelectorAll('.z-scroll')[idx]);
 						
                         if (currentSectionOffset > (scrollTop * opts.threshold) && currentSectionOffset < (scrollTop + userViewportH) / opts.threshold) {
-                            [].forEach.call(bullets, function (elem) {
+                            [].forEach.call(arr, function (elem) {
                                 elem.classList.remove('active-screen');
                             });
 							
-                            bullets[idx].classList.add('active-screen');
+                            elem.classList.add('active-screen');
                         }
                     });
                 }, false);
