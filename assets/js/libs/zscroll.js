@@ -1,4 +1,10 @@
-define(['jquery'], function ($) { 'use strict';
+/**
+ *	@file AMD module which realizes the Full Screen Vertical Scroller
+ *	@copyright Yaroslav Surilov 2014-2015
+ */
+define(['jquery'], function ($) {
+	'use strict';
+	
 	var zScroll = (function () {
         var doc = document,
 			body = doc.body,
@@ -30,11 +36,16 @@ define(['jquery'], function ($) { 'use strict';
                 return Math.round(top);
             },
 			validateOpts: function (opts, amount) {
-				if (amount > 1 || (amount && Object.prototype.toString.call(opts).slice(8, -1) !== 'Object')) {
+				if (amount > 1 || (amount && !Object.isObject(opts))) {
 					throw new Error('zScroll initialization: incorrect syntax, see documentation for details.');
 				}
 				
+				// If no options (opts === undefined) set to empty object.
+				opts = opts || {};
+				
+				// Here are default values for absent options.
 				return {
+					connector: !!opts.connector,
 					fill: opts.fill || '#000',
 					shape: opts.shape || 'circle',
 					size: opts.size || 'small',
@@ -52,7 +63,7 @@ define(['jquery'], function ($) { 'use strict';
 				
 				paginator = doc.getElementById('paginator');
 				
-				paginator.style.marginTop = -parseFloat(getComputedStyle(paginator).height) / 2;
+				paginator.style.marginTop = -parseFloat(getComputedStyle(paginator).height) / 2 + 'px';
                 bullets = doc.querySelectorAll('#paginator b');
                 bullets[0].classList.add('active-screen');
 				
@@ -63,7 +74,10 @@ define(['jquery'], function ($) { 'use strict';
 			}
         };
 
-        /** Public API. */
+        /**
+		 *	Public API.
+		 *	@public
+		 */
         return {
             /**
              * Scroller initialization.
@@ -77,7 +91,7 @@ define(['jquery'], function ($) { 'use strict';
 
 				renderInfo.paginator.addEventListener('click', function (e) {
 					var targetBullet = e.target,
-						bulletIdx = Array.prototype.indexOf.call(e.currentTarget.children, targetBullet);
+						bulletIdx = Array.prototype.indexOf.call(renderInfo.bullets, targetBullet);
 					
 					e.stopPropagation();
 					
